@@ -1,5 +1,7 @@
 package com.my.controller;
 
+import com.my.entity.FractionNum;
+
 import java.util.Stack;
 
 /**

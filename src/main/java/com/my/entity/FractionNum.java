@@ -1,4 +1,4 @@
-package com.my.controller;
+package com.my.entity;
 
 
 public class FractionNum {

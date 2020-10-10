@@ -1,5 +1,6 @@
 package com.my.controller;
 
+import com.my.entity.FractionNum;
 import com.my.util.ReadTxt;
 
 import java.util.Scanner;
