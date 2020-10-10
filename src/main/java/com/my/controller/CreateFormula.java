@@ -7,27 +7,47 @@ public class CreateFormula {
     public static final String False = "false";
     public static final String Error = "error";
 
-    public static String createProblem() throws Exception {  //产生整数式子
+    /**
+     * 生成四则运算式子
+     * @param maxNum    式子中的数值的最大值
+     * @return          返回一个不超三个运算符的四则运算式子
+     * @throws Exception 抛出异常
+     */
+    public static String createProblem(int maxNum) throws Exception {  //产生整数式子
         Random r = new Random();
+        // 操作符数值
         String[] operator = {"+", "-", "*", "÷"};
-        //操作符的个数
+        // 随机生成操作符的个数1, 2
         int operatorNum = 1 + r.nextInt(2);
-        //新建数组来保存操作数
+        // 新建数组来保存操作数
         FractionNum[] number = new FractionNum[operatorNum + 1];
-//        String[] number = new String[operatorNum+1];
+
         //操作符的下标
         int[] arr = index(operatorNum);
         String s = "";
-
+        /* 通过循环和判断获取四则运算式子的所有操作数 */
         for (int j = 0; j < operatorNum + 1; j++) {
-            int num1 = r.nextInt(10);
+            int num1 = r.nextInt(maxNum);
 //            int num2 = 10 - num1;
-            int num2 = 1 + r.nextInt(9);
-            int flag = r.nextInt(2);//0为整数，1为分数
+            int num2 ;
+            int flag = r.nextInt(3);//0为整数, 1为分数, 2为带分数
             FractionNum num;
-            if (flag == 0) {
+            if (flag == 0) {  // 整数处理
+                if(num1 > maxNum){
+                    j--;
+                    continue;
+                }
                 num = new FractionNum(num1);
             } else {
+                if(flag == 1){  // 分数处理
+                    num2 =1 + r.nextInt(maxNum - 1);
+                } else {  // 带分数处理
+                    num2 = maxNum + r.nextInt(maxNum);
+                }
+                if((num1/num2) >= maxNum ){  // 保证数值不超过范围
+                    j--;
+                    continue;
+                }
                 num = new FractionNum(num1, num2);
             }
             number[j] = num;
@@ -56,14 +76,14 @@ public class CreateFormula {
         }
         s = CreateFormula.check(s, operatorNum, arr, number, operator, flag);
         if ("The formula is error".equals(s)) {
-            return createProblem();
+            return createProblem(maxNum);
         }
         FractionNum num = FracCalculator.calculator.calculate(s);
         int answer = num.numerator;
         if (answer >= 0) {
             s = s + "=";
         } else {
-            return createProblem();
+            return createProblem(maxNum);
         }
         return s;
 
@@ -97,15 +117,21 @@ public class CreateFormula {
     public static String check(String str, int operatorNum, int[] arr, FractionNum[] number, String[] operator, int flag) throws Exception {
 
         for (int i = 0; i < operatorNum; i++) {
-            if (arr[i] == 1) {  // 检测出当前操作符为-号
-                if (operatorNum != 1) {  // 操作符的个数不唯一
+            // 检测出当前操作符为-号
+            if (arr[i] == 1) {
+                // 操作符的个数不唯一
+                if (operatorNum != 1) {
                     String str1;
                     String str2;
-                    if (i == 0) {  // -号为第一个运算符
-                        if (flag == 0) {  // -号为第一个运算符且为左括号的情况
+                    // -号为第一个运算符
+                    if (i == 0) {
+                        // -号为第一个运算符且为左括号的情况
+                        if (flag == 0) {
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(number[0].toString(), number[1].toString()))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(number[0].toString(), number[1].toString()))) {
                                 FractionNum temp = number[0];
                                 number[0] = number[1];
@@ -113,40 +139,53 @@ public class CreateFormula {
                                 str = "(" + number[0] + operator[arr[0]] + number[1] + ")" + operator[arr[1]] + number[2];
                             }
                         }
+
+                        // -号为第一个运算符且为右括号的情况
                         if (flag == 1) {
                             str1 = "" + number[0];
                             str2 = "(" + number[1] + operator[arr[1]] + number[2] + ")";
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(str1, str2))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(str1, str2))) {
                                 str = str2 + operator[arr[i]] + str1;
                             }
                         } else {
                             str1 = "" + number[0];
                             str2 = number[1] + operator[arr[1]] + number[2];
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(str1, str2))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(str1, str2))) {
                                 str = str2 + operator[arr[i]] + str1;
                             }
                         }
                     } else {//第二个运算符为-号
+                        // 第二个操作符为-号, 且为左括号情况
                         if (flag == 0) {
                             str1 = "(" + number[0] + operator[arr[0]] + number[1] + ")";
                             str2 = "" + number[2];
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(str1, str2))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(str1, str2))) {
                                 str = str2 + operator[arr[i]] + str1;
                             }
                         }
+
+                        // 第二个操作符为-号, 且为右括号情况
                         if (flag == 1) {
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(number[1] + "", number[2] + ""))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(number[1] + "", number[2] + ""))) {
                                 FractionNum temp = number[1];
                                 number[1] = number[2];
@@ -156,9 +195,11 @@ public class CreateFormula {
                         } else {
                             str1 = number[0] + operator[arr[0]] + number[1];
                             str2 = "" + number[2];
+                            //  其中一个操作数出现负号
                             if ("error".equals(compare(str1, str2))) {
                                 str = "The formula is error";
                             }
+                            // 后操作数比前操作数大
                             if ("true".equals(compare(str1, str2))) {
                                 str = str2 + operator[arr[i]] + str1;
                             }
@@ -175,12 +216,15 @@ public class CreateFormula {
                     }
                 }
             }
-            if (arr[i] == 3) {  // 检测到操作符为÷号
-                if (operatorNum == 1) {  // 操作符为÷号且只有一个操作符
+
+            // 检测到操作符为÷号
+            if (arr[i] == 3) {
+                // 操作符为÷号且只有一个操作符
+                if (operatorNum == 1) {
                     /* 判断÷号后面的数字是否为0, 如果为0就把其改为1 */
                     number[1] = (number[1].numerator == 0) ? new FractionNum(1) : number[1];
                     str = number[0] + operator[arr[0]] + number[1];
-                } else {  // 操作符为÷号
+                } else {
                     /* 判断÷号后面的数字是否为0, 如果为0就把其改为1 */
                     number[i + 1] = (number[i + 1].numerator == 0) ? new FractionNum(1) : number[i + 1];
                     if (flag == 0) {  // 判断式子是否为左括号情况
@@ -221,7 +265,6 @@ public class CreateFormula {
 
     /**
      * 判断分数内容是否正常，即是否出现负数的分子分母
-     *
      * @param num 带分数
      * @return 如果带分数的分子分母存在负数则返回false, 否则返回true
      */

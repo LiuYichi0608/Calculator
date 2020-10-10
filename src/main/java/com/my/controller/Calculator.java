@@ -8,20 +8,9 @@ public class Calculator {
     private static final Stack<Character> stack_2;//临时栈
 
     static {
-        stack = new Stack<Character>();
-        stack_1 = new Stack<Character>();
-        stack_2 = new Stack<Character>();
-    }
-
-
-    public static void main(String[] args) {
-        String str = "1/2";
-        try {
-            Double b = calculate(str);
-            System.out.println("运算结果为：" + b);
-        } catch (Exception e) {
-            System.out.println("error");
-        }
+        stack = new Stack<>();
+        stack_1 = new Stack<>();
+        stack_2 = new Stack<>();
     }
 
     //运算
@@ -85,13 +74,10 @@ public class Calculator {
             index++;
             stack_2.push(stack.pop());
         }
-        Stack<Double> s = new Stack<Double>();//用于最后计算的栈
+        Stack<Double> s = new Stack<>();//用于最后计算的栈
         while (!stack_2.empty()) {
             char ch = stack_2.pop();
             if (index > 1) {
-//                if(index == 3){
-//                    return s.pop();
-//                }
                 if (ch == '*' || ch == '/' || ch == '+' || ch == '-') {
                     double sum = 0;
                     double num1 = s.pop();
@@ -117,7 +103,6 @@ public class Calculator {
                     throw new Exception();
                 }
             } else {
-                //TODO
                 s.push((double) Character.getNumericValue(ch));
                 break;
             }
@@ -127,7 +112,6 @@ public class Calculator {
 
     /**
      * 带分数比较
-     *
      * @param num1 带分数1
      * @param num2 带分数2
      * @return false表示前一个值比另一个值大，true表示后者比前者大
@@ -139,7 +123,6 @@ public class Calculator {
         if (num1Index1 != -1 || num2Index1 != -1) {
             if (num1Index1 == -1) {//3和2’1/3
                 Double answer1 = Calculator.calculate(num1.toString());
-                System.out.println(num2.toString().substring(0, num2Index1));
                 Double answer2 = Calculator.calculate(num2.toString().substring(0, num2Index1));
                 return answer1 <= answer2;
             } else if (num2Index1 == -1) {//2’1/3和3
@@ -173,8 +156,6 @@ public class Calculator {
                 Double answer2 = calculate(num2.toString());
                 return answer1 <= answer2;
             } catch (Exception e) {
-                System.out.println(num1.toString() + "---");
-                System.out.println(num2.toString() + "---");
                 e.printStackTrace();
             }
             return false;

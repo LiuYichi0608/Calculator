@@ -15,7 +15,6 @@ public class ReadTxt {
      */
     public static StringBuffer readTxt(String txtPath) {
         File file = new File(txtPath);
-        
         if(file.isFile() && file.exists()){
             try (FileInputStream fileInputStream = new FileInputStream(file);
                  InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -38,7 +37,7 @@ public class ReadTxt {
      * @param txtPath txt文件路径
      * @param content 需要写入的文本
      */
-    public static void writeTxt(String txtPath,String content){    
+    public static void writeTxt(String txtPath,String content){
        File file = new File(txtPath);
        try (FileOutputStream fileOutputStream = new FileOutputStream(file)){
            if(!file.exists()){
@@ -51,8 +50,5 @@ public class ReadTxt {
            e.printStackTrace();
        }
     }
-    public static void main(String[] args) {
-		StringBuffer sb = ReadTxt.readTxt("C:\\Users\\10973\\Desktop\\test\\orig.txt");
-		System.out.println(sb.toString());
-	}
+
 }

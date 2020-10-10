@@ -32,8 +32,8 @@ public class FracCalculator {
         }
         // 初始化栈
         /* 数字栈：用于存储表达式中的各个数字 */
-        Stack<FractionNum> numberStack = new Stack<FractionNum>();
-        symbolStack = new Stack<Character>();
+        Stack<FractionNum> numberStack = new Stack<>();
+        symbolStack = new Stack<>();
         // 用于缓存数字，因为数字可能是多位的
         StringBuffer temp = new StringBuffer();
         // 从表达式的第一个字符开始处理
@@ -102,7 +102,7 @@ public class FracCalculator {
     private boolean isStandard(String numStr) {
         if (numStr == null || numStr.isEmpty()) // 表达式不能为空
             return false;
-        Stack<Character> stack = new Stack<Character>(); // 用来保存括号，检查左右括号是否匹配
+        Stack<Character> stack = new Stack<>(); // 用来保存括号，检查左右括号是否匹配
         boolean b = false; // 用来标记'='符号是否存在多个
         for (int i = 0; i < numStr.length(); i++) {
             char n = numStr.charAt(i);
