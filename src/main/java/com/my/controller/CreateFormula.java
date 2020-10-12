@@ -81,7 +81,7 @@ public class CreateFormula {
             return createProblem(maxNum);
         }
         FractionNum num = FracCalculator.calculator.calculate(s);
-        int answer = num.numerator;
+        int answer = num.getNumerator();
         if (answer >= 0) {
             s = s + "=";
         } else {
@@ -224,11 +224,11 @@ public class CreateFormula {
                 // 操作符为÷号且只有一个操作符
                 if (operatorNum == 1) {
                     /* 判断÷号后面的数字是否为0, 如果为0就把其改为1 */
-                    number[1] = (number[1].numerator == 0) ? new FractionNum(1) : number[1];
+                    number[1] = (number[1].getNumerator() == 0) ? new FractionNum(1) : number[1];
                     str = number[0] + operator[arr[0]] + number[1];
                 } else {
                     /* 判断÷号后面的数字是否为0, 如果为0就把其改为1 */
-                    number[i + 1] = (number[i + 1].numerator == 0) ? new FractionNum(1) : number[i + 1];
+                    number[i + 1] = (number[i + 1].getNumerator() == 0) ? new FractionNum(1) : number[i + 1];
                     if (flag == 0) {  // 判断式子是否为左括号情况
                         str = "(" + number[0] + operator[arr[0]] + number[1] + ")" + operator[arr[1]] + number[2];
                     } else {  // 式子为右括号或者无括号
@@ -242,6 +242,7 @@ public class CreateFormula {
     }
 
     /**
+     * 式子前后的数值做比较
      * @param str1 -号式子的左半部
      * @param str2 -号式子的右半部
      * @return 返回一个boolean类型的值，false表示左半部值比右半部值大，true表示后者比前者大
@@ -271,7 +272,7 @@ public class CreateFormula {
      * @return 如果带分数的分子分母存在负数则返回false, 否则返回true
      */
     public static boolean isNormal(FractionNum num) {
-        return num.denominator >= 0 && num.numerator >= 0;
+        return num.getDenominator() >= 0 && num.getNumerator() >= 0;
     }
 
 

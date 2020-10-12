@@ -20,6 +20,14 @@ public class FractionNum {
         denominator = 1;
     }
 
+
+    public int getNumerator() {
+        return numerator;
+    }
+    public int getDenominator() {
+        return denominator;
+    }
+
     public static FractionNum with(FractionNum a, FractionNum b) {
         return new FractionNum(b.denominator * a.getNum() + b.numerator, b.denominator);
     }

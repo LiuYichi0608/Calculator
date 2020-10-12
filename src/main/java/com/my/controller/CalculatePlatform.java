@@ -20,7 +20,7 @@ public class CalculatePlatform {
         StringBuilder wrongBuffer = new StringBuilder();        // 错误答案buff
         String[] officialAnswer = new String[num];              // 练习答案, 用于逐个与用户输入答案做比较
         int[] userAnswerIndex = new int[num];                   // int数组, 0表示答案有误, 1表示答案正确
-
+        FracCalculator fracCalculator = new FracCalculator();
         String userAnswer;                                      // 暂存用户输入答案
         int correctNum = 0;                                     // 回答正确题目个数
         int wrongNum = 0;                                       // 回答错误题目个数
@@ -38,7 +38,8 @@ public class CalculatePlatform {
 
             /* 用户逐题输入式子的结果 */
             userAnswer = scanner.next();
-            if(officialAnswer[i].equals(userAnswer)){
+            FractionNum frcAnswerNum = fracCalculator.calculate(userAnswer);
+            if(officialAnswer[i].equals(frcAnswerNum.toString())){
                 userAnswerIndex[i] = 1;
                 correctNum++;
             } else {
